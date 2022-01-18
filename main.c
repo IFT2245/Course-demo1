@@ -123,8 +123,11 @@ int main() {
     //malloc_is_new();
     //illegal_access();
 
-    char *x[] = {"echo", "https://www.google.com/", NULL};
-    execvp("echo", x);
+    //char *x[] = {"echo", "https://www.google.com/", NULL};
+    //execvp("echo", x);
+
+    //char *y[] = {"curl", "https://www.google.com/", NULL};
+    //execvp("curl", y);
 
     ptr_of_ptr();
 
