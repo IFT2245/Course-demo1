@@ -2,6 +2,8 @@
 #include <malloc.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#define flush() do { fflush(stdout); } while(0)
 
 struct wack{
     long long undeux;
@@ -31,7 +33,8 @@ void malloc_is_tableau() {
     oh_no[1] = deux;
     oh_no[2] = trois;
     oh_no[3] = quatre;
-
+    printf("%d \n", oh_no[3]);
+    //flush();
     struct wack *oh_no_no_no = (struct wack*) oh_no;
 
     long long einzwei = oh_no_no_no->undeux;
@@ -48,10 +51,14 @@ struct l_node {
 
 #define l_node struct l_node*
 
-/*l_node link(l_node current, l_node next) {
-    current->next = next;
-    return next;
-}*/
+l_node add_node(l_node current, l_node next) {
+    l_node temp = current;
+    while (temp->next != NULL){
+        temp = temp->next;
+    }
+    temp->next = next;
+    return current;
+}
 
 l_node new_node(int val) {
     l_node node = malloc(sizeof(l_node));
@@ -62,7 +69,7 @@ l_node new_node(int val) {
 
 l_node free_node(l_node node) {
     l_node next = node->next;
-    printf("%d\n", node->nb);
+    //printf("%d\n", node->nb);
     free(node);
     return next;
 }
@@ -78,7 +85,7 @@ void malloc_is_new() {
     l_node current = head;
 
     //for loop sur une seule ligne
-    for(int i=1; i<1000; i++) current = link(current, new_node(i)); //current = current.link(new Node(i));
+    for(int i=1; i<1000; i++) current = add_node(current, new_node(i)); //current = current.add(new Node(i));
 
     free_l_list(head);
 }
@@ -119,15 +126,29 @@ void ptr_of_ptr() {
 }
 
 int main() {
-    //malloc_is_tableau();
-    //malloc_is_new();
+    malloc_is_tableau();
+    malloc_is_new();
     //illegal_access();
+    ptr_of_ptr();
 
-    //char *x[] = {"echo", "https://www.google.com/", NULL};
-    //execvp("echo", x);
+    //fork
+    pid_t pid;
 
-    //char *y[] = {"curl", "https://www.google.com/", NULL};
-    //execvp("curl", y);
+    pid = fork();
+    pid = fork();
+
+    printf("bonjour \n"); // how many times will this get printed?
+
+    int status;
+    waitpid(pid, &status, 0);
+
+    //waitpid(pid1, &status, 0);
+    //waitpid(pid2, &status, 0);
+    char *x[] = {"echo", "https://www.google.com/", NULL};
+    execvp("echo", x);
+
+    char *y[] = {"curl", "https://www.google.com/", NULL};
+    execvp("curl", y);
 
     ptr_of_ptr();
 
@@ -136,6 +157,9 @@ int main() {
     bla[9] = NULL;
 
     char *bla2 = realloc(bla, sizeof(char) * 20);
+
+
+
 
 
     return 0;
